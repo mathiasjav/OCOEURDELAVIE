@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Association Ô cœur de la vie - Ensemble honorons la vie à travers la mort</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #b2c25c, #60aabd, #d76b6b);
+            color: #2c2c2c;
+            background-size: 400% 400%;
+            animation: moveBg 20s ease infinite;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        @keyframes moveBg {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        /* Photo asso en haut à gauche */
+        #photo-asso {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        #photo-asso:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        #photo-asso img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Photo dans le texte */
+        .photo-dans-texte {
+            float: right;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            margin: 5px 0 10px 20px;
+            shape-outside: circle(50%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+            opacity: 0.9;
+            transition: all 0.4s ease;
+        }
+
+        .photo-dans-texte:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .photo-dans-texte img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Poste Facebook */
+        #poste {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        #poste::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #b2c25c, #60aabd, #d76b6b);
+        }
+
+        #poste p {
+            margin: 12px 0;
+            line-height: 1.7;
+            color: #4b5c6b;
+            text-align: justify;
+        }
+
+        .btn-podcast {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(to right, #60aabd, #4a8b9d);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(96, 170, 189, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-podcast:hover {
+            background: linear-gradient(to right, #d76b6b, #c55a5a);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(215, 107, 107, 0.4);
+        }
+
+        /* HEADER QUI PREND TOUTE LA PAGE */
+        #header {
+            height: 100vh;
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("bannier.webp");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1));
+        }
+
+        #header h1 {
+            margin: 0;
+            font-size: 4em;
+            font-weight: normal;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        #header h2 {
+            margin-top: 20px;
+            font-weight: normal;
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 2.2em;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        .header-scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2em;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* IMAGE */
+        .image-top {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .image-top img {
+            width: 100%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.6s ease;
+            filter: brightness(1.05) contrast(1.05);
+        }
+
+        .image-top img:hover {
+            transform: scale(1.03);
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+        }
+
+        /* CONTENU - 4 BULLES */
+        #content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .article {
+            max-width: 380px;
+            padding: 35px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #b2c25c, #60aabd, #d76b6b);
+            opacity: 0.7;
+        }
+
+        .article:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        /* FORMES ORGANIQUES */
+        .tache1 { border-radius: 30% 20% 40% 40% / 40% 55% 30% 30%; }
+        .tache2 { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
+        .tache3 { border-radius: 36% 30% 60% 80% / 36% 80% 50% 50%; }
+        .tache4 { border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%; }
+
+        /* COULEURS DOUCES */
+        .sable { background: rgba(246, 239, 231, 0.9); }
+        .sauge { background: rgba(227, 239, 231, 0.9); }
+        .poudre { background: rgba(244, 230, 236, 0.9); }
+        .ciel { background: rgba(228, 238, 246, 0.9); }
+
+        .article h3 {
+            margin-top: 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #4a8b9d;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .article h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #60aabd, transparent);
+        }
+
+        .article ul {
+            padding-left: 25px;
+        }
+
+        .article li {
+            margin-bottom: 12px;
+            color: #4b5c6b;
+            position: relative;
+            padding-left: 5px;
+        }
+
+        .article li::before {
+            content: '•';
+            color: #60aabd;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-size: 1.2em;
+        }
+
+        /* CONTACT */
+        a {
+            color: #4a8b9d;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: #d76b6b;
+            text-decoration: none;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #d76b6b;
+            transition: width 0.3s ease;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        /* FOOTER */
+        .liens {
+            text-align: center;
+            padding: 40px 15px;
+            background: rgba(240, 240, 240, 0.95);
+            position: relative;
+            z-index: 5;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.5);
+            margin-top: 50px;
+        }
+
+        .liens a {
+            margin: 0 20px;
+            font-weight: bold;
+            color: #2c2c2c;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nom {
+            font-weight: bold;
+            font-style: italic;
+            color: #60aabd;
+            font-size: 1.2em;
+        }
+
+        .tel {
+            font-weight: bold;
+            font-size: 1.4em;
+            color: #b2c25c;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .telicon {
+            color: #b2c25c;
+            font-size: 1.4em;
+            vertical-align: middle;
+        }
+
+        /* Carte */
+        #map {
+            height: 400px;
+            width: 100%;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            z-index: 5;
+            position: relative;
+            border: 3px solid white;
+            overflow: hidden;
+        }
+
+        /* Effet de lumière douce */
+        .light-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* BOUTON RETOUR EN HAUT */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(96, 170, 189, 0.9);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid white;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #back-to-top:hover {
+            background: rgba(215, 107, 107, 0.9);
+            transform: translateY(-5px);
+        }
+
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ANIMATIONS DES ARTICLES */
+        .article:nth-child(1) { animation-delay: 0.1s; }
+        .article:nth-child(2) { animation-delay: 0.3s; }
+        .article:nth-child(3) { animation-delay: 0.5s; }
+        .article:nth-child(4) { animation-delay: 0.7s; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            #header h1 { font-size: 2.5em; }
+            #header h2 { font-size: 1.5em; }
+            .article { max-width: 100%; }
+            #map { height: 300px; margin: 30px auto; }
+            #poste { margin: 15px; padding: 20px; }
+            #photo-asso { width: 70px; height: 70px; top: 10px; left: 10px; }
+            .photo-dans-texte { width: 120px; height: 120px; margin: 5px 0 10px 10px; float: none; display: block; margin: 15px auto; }
+            .liens a { display: block; margin: 10px 0; }
+            #back-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+            .header-scroll-indicator { bottom: 20px; font-size: 1.5em; }
+        }
+
+        @media (max-width: 480px) {
+            #header h1 { font-size: 2em; }
+            #header h2 { font-size: 1.2em; }
+            .btn-podcast { padding: 10px 20px; font-size: 0.9em; }
+            .tel { font-size: 1.2em; }
+            #photo-asso { width: 60px; height: 60px; }
+        }
+
+        /* ANIMATIONS DES PAPILLONS */
+        .papillon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1;
+            pointer-events: none;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+            opacity: 0.8;
+        }
+
+        @keyframes volPapillon {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            20% { transform: translate(40px, -40px) rotate(15deg) scale(1.1); }
+            40% { transform: translate(80px, -15px) rotate(-10deg) scale(1); }
+            60% { transform: translate(120px, 25px) rotate(10deg) scale(1.1); }
+            80% { transform: translate(160px, 15px) rotate(0deg) scale(1); }
+        }
+
+        /* ANIMATIONS DES FEUILLES */
+        .feuille {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes tomberFeuille {
+            0% { transform: translateY(-100px) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(100vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* ANIMATIONS DES ÉTOILES */
+        .etoile {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 20%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes scintiller {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* PARTICULES FLOTTANTES */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #b2c25c 0%, transparent 70%);
+            opacity: 0.1;
+            filter: blur(20px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* BOUTON WHATSAPP */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="light-overlay"></div>
+
+    <!-- Photo asso en haut à gauche -->
+    <div id="photo-asso" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <img src="logo.jpg" alt="Association Ô cœur de la vie">
+    </div>
+
+    <!-- Animations -->
+    <div id="papillons-container"></div>
+    <div id="feuilles-container"></div>
+    <div id="etoiles-container"></div>
+    <div id="particles-container"></div>
+
+    <!-- HEADER QUI PREND TOUTE LA PAGE -->
+    <div id="header">
+        <h1>Association Ô cœur de la vie</h1>
+        <h2>Ensemble honorons la vie à travers la mort</h2>
+        
+        <div class="header-scroll-indicator" onclick="scrollToContent()">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+
+    <div class="image-top">
+        <img src="bannier.webp" alt="Bannière de l'association">
+    </div>
+
+    <!-- Poste avec photo dans le texte -->
+    <div id="poste">
+        <p><strong>Bonjour,</strong></p>
+        <p>Je suis <strong>Sylvie Darracq</strong>, présidente de l'association <strong>"Ô cœur de la vie"</strong>.</p>
+        <p>J'ai été approchée par Mathilde de l'émission <strong>"Le commun des vivants"</strong> de la station <a href="https://www.facebook.com/HAPCHOTWR" target="_blank">Hapchot Radio</a>. L'émission a pour but de parler de l'extraordinaire dans l'ordinaire de la vie des gens. L'histoire par ceux qui la font.</p>
+        
+        <div class="photo-dans-texte">
+            <img src="photo-president.jpg" alt="Sylvie Darracq">
+        </div>
+        
+        <p>Lors de son interview, elle m'a invitée à raconter mon histoire, mes rencontres, mon témoignage. Vous trouverez dans ce podcast, mon parcours, mes réflexions, mon cheminement qui m'amène à créer cette association <strong>Ô cœur de la vie Landes</strong>, rejointe par Kristell Auzizeau et Hélène Le Cadic pour s'engager sur ce chemin de la vie, la mort, et le deuil...</p>
+        
+        <a href="https://www.mixcloud.com/hapchot/le-commun-des-vivants-la-mort-au-coeur-de-la-vie/?fbclid=IwZXh0bgNhZW0CMTAAc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHkGhXX-JOecvAD_Q_gxM0YTL0U3-UK0cZ1b8yNRziU9UPzWu69EDzPRh1E6N_aem_N9Kh6sdQeGXR7mqdMput3A" class="btn-podcast" target="_blank">
+            <i class="fas fa-podcast"></i> Écouter le podcast
+        </a>
+        
+        <p style="margin-top: 20px; font-size: 0.95em;">
+            <a href="https://www.facebook.com/permalink.php?story_fbid=pfbid0343xbh8AMEfEVux2ZwaGVbXbADtdujfr1yFV1Z6Vn5SLBkN6TymG8uGC4Fn5mtHsCl&id=61569885189815" target="_blank">
+                <i class="fab fa-facebook"></i> Voir le post Facebook
+            </a>
+        </p>
+    </div>
+
+    <!-- 4 bulles -->
+    <div id="content">
+
+        <div class="article sable tache1">
+            <p>
+                L'association <strong class="nom">Ô cœur de la vie</strong> est née d'un constat simple :
+                la mort fait encore trop souvent silence,
+                alors qu'elle concerne tout un chacun.
+            </p>
+            <ul>
+                <li>Personnes en deuil</li>
+                <li>Aidants et proches</li>
+                <li>Soignants et accompagnants</li>
+                <li>Professionnels du funéraire</li>
+            </ul>
+        </div>
+
+        <div class="article sauge tache2">
+            <h3>Nos actions</h3>
+            <ul>
+                <li>Espaces d'écoute et de parole</li>
+                <li>Ciné-débats et conférences</li>
+                <li>Rencontres et partenariats locaux</li>
+                <li>Ateliers créatifs et mémoriels</li>
+            </ul>
+        </div>
+
+        <div class="article poudre tache3">
+            <h3>Nous rejoindre / Nous soutenir</h3>
+            <p>
+                Vous pouvez soutenir l'association ou nous rejoindre via :
+            </p>
+            <a href="https://www.helloasso.com/associations/o-c-ur-de-la-vie" target="_blank">
+                <img src="Helloasso-logo.png" alt="Image Hello asso" style="box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); width: 100%; border-radius: 60px 80px 50px 100px; transition: transform 0.3s ease; margin-top: 15px;">
+            </a>
+        </div>
+
+        <div class="article ciel tache4">
+            <h3>Nous contacter</h3>
+            <p style="margin-bottom: 20px;">
+                <i class="fas fa-envelope"></i> <a href="mailto:ocvlandes@gmail.com">ocvlandes@gmail.com</a>
+            </p>
+            
+            <p style="margin-bottom: 20px;">
+                <i class="fas fa-phone telicon"></i>
+                <a href="tel:+33640649428"><strong class="tel">06 40 64 94 28</strong></a>
+            </p>
+            
+            <p>
+                Présidente de l'association<br>
+                <strong>Sylvie DARRACQ</strong>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Carte -->
+    <div id="map"></div>
+
+    <div class="liens">
+        <a href="https://www.facebook.com/profile.php?id=61569885189815" target="_blank">
+            <i class="fab fa-facebook"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/ocoeur.delavie/" target="_blank">
+            <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://www.helloasso.com/associations/o-c-ur-de-la-vie" target="_blank">
+            <i class="fas fa-hand-holding-heart"></i> HelloAsso
+        </a>
+    </div>
+
+    <!-- Boutons flottants -->
+    <div id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    
+    <a href="https://wa.me/33640649428" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser la carte
+            initMap();
+            
+            // Créer les animations
+            creerPapillons();
+            creerFeuilles();
+            creerEtoiles();
+            creerParticles();
+            
+            // Gestion du scroll
+            initScrollAnimations();
+            
+            // Animation de la bannière
+            animerBanniere();
+        });
+
+        // Fonction pour défiler vers le contenu
+        function scrollToContent() {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Création des papillons animés
+        function creerPapillons() {
+            const container = document.getElementById('papillons-container');
+            const colors = ['#ff99cc', '#99ccff', '#ffcc99', '#ccff99'];
+            
+            for (let i = 0; i < 10; i++) {
+                const papillon = document.createElement('div');
+                papillon.className = 'papillon';
+                
+                // Position aléatoire
+                const top = Math.random() * 90 + 5;
+                const left = Math.random() * 90 + 5;
+                const delay = Math.random() * 5;
+                const duration = 15 + Math.random() * 10;
+                
+                // Style du papillon avec SVG
+                const color1 = colors[Math.floor(Math.random() * colors.length)];
+                const color2 = colors[Math.floor(Math.random() * colors.length)];
+                
+                papillon.style.cssText = `
+                    top: ${top}%;
+                    left: ${left}%;
+                    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 20 Q60 10 70 20 Q80 30 70 40 Q60 50 50 40 Q40 50 30 40 Q20 30 30 20 Q40 10 50 20" fill="${color1}" stroke="${color1.replace('cc', '66')}"/><path d="M30 60 Q40 50 50 60 Q60 70 70 60 Q80 50 70 40 Q60 30 50 40 Q40 30 30 40 Q20 50 30 60" fill="${color2}" stroke="${color2.replace('cc', '66')}"/></svg>');
+                    animation: volPapillon ${duration}s infinite ease-in-out ${delay}s;
+                `;
+                
+                container.appendChild(papillon);
+            }
+        }
+
+        // Création des feuilles volantes
+        function creerFeuilles() {
+            const container = document.getElementById('feuilles-container');
+            const leafColors = ['#b2c25c', '#a3b84f', '#8fa844'];
+            
+            for (let i = 0; i < 12; i++) {
+                const feuille = document.createElement('div');
+                feuille.className = 'feuille';
+                
+                // Position aléatoire
+                const left = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = 15 + Math.random() * 15;
+                
+                // Style de la feuille
+                const color = leafColors[Math.floor(Math.random() * leafColors.length)];
+                
+                feuille.style.cssText = `
+                    left: ${left}%;
+                    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 5 90 30 Q85 60 50 90 Q15 60 10 30 Q30 5 50 10" fill="${color}" opacity="0.7"/></svg>');
+                    animation: tomberFeuille ${duration}s infinite linear ${delay}s;
+                `;
+                
+                container.appendChild(feuille);
+            }
+        }
+
+        // Création des étoiles scintillantes
+        function creerEtoiles() {
+            const container = document.getElementById('etoiles-container');
+            
+            for (let i = 0; i < 15; i++) {
+                const etoile = document.createElement('div');
+                etoile.className = 'etoile';
+                
+                // Position aléatoire
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = 3 + Math.random() * 4;
+                
+                etoile.style.cssText = `
+                    top: ${top}%;
+                    left: ${left}%;
+                    animation: scintiller ${duration}s infinite ease-in-out ${delay}s;
+                `;
+                
+                container.appendChild(etoile);
+            }
+        }
+
+        // Création des particules flottantes
+        function creerParticles() {
+            const container = document.getElementById('particles-container');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = 50 + Math.random() * 200;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = 20 + Math.random() * 30;
+                const delay = Math.random() * 20;
+                
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    animation: moveBg ${duration}s ease infinite ${delay}s;
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialiser la carte
+        function initMap() {
+            var map = L.map('map').setView([43.7167, -0.6833], 15);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributeurs'
+            }).addTo(map);
+            
+            // Marqueur personnalisé
+            var customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<i class="fas fa-heart" style="color: #d76b6b; font-size: 30px; text-shadow: 0 2px 5px rgba(0,0,0,0.3);"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
+            });
+            
+            L.marker([43.7167, -0.6833], {icon: customIcon}).addTo(map)
+                .bindPopup('<div style="font-weight:bold; font-size:1.1em; color:#4a8b9d;">Association Ô cœur de la vie</div><div>1369 Route d\'Ossens, 40465 Pontonx-sur-l\'Adour</div>')
+                .openPopup();
+        }
+
+        // Animation au scroll
+        function initScrollAnimations() {
+            // Bouton retour en haut
+            const backToTopBtn = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                // Bouton retour en haut
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+                
+                // Animation des articles
+                const articles = document.querySelectorAll('.article');
+                articles.forEach(article => {
+                    const articleTop = article.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (articleTop < windowHeight - 100) {
+                        article.style.opacity = '1';
+                        article.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            // Clic sur le bouton retour en haut
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Navigation fluide
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Animation de la bannière
+        function animerBanniere() {
+            const bannerImage = document.querySelector('.image-top img');
+            if (bannerImage) {
+                setInterval(() => {
+                    bannerImage.style.borderRadius = `${30 + Math.random() * 20}% ${70 - Math.random() * 20}% ${70 - Math.random() * 20}% ${30 + Math.random() * 20}% / ${30 + Math.random() * 20}% ${30 + Math.random() * 20}% ${70 - Math.random() * 20}% ${70 - Math.random() * 20}%`;
+                }, 8000);
+            }
+        }
+
+        // Création d'oiseaux animés (optionnel)
+        function creerOiseaux() {
+            const container = document.createElement('div');
+            container.id = 'oiseaux';
+            container.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;';
+            document.body.appendChild(container);
+            
+            for(let i = 0; i < 6; i++) {
+                const oiseau = document.createElement('div');
+                oiseau.innerHTML = '🕊️';
+                oiseau.style.cssText = `
+                    position: absolute;
+                    font-size: ${20 + Math.random() * 15}px;
+                    opacity: 0.6;
+                    animation: flyBird ${20 + Math.random() * 30}s infinite linear ${Math.random() * 15}s;
+                `;
+                
+                oiseau.style.left = `${Math.random() * 100}%`;
+                oiseau.style.top = `${Math.random() * 100}%`;
+                
+                container.appendChild(oiseau);
+            }
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes flyBird {
+                    0% { transform: translate(0, 0) scaleX(1); }
+                    25% { transform: translate(${300 + Math.random() * 400}px, ${-50 + Math.random() * 100}px) scaleX(1); }
+                    26% { transform: translate(${300 + Math.random() * 400}px, ${-50 + Math.random() * 100}px) scaleX(-1); }
+                    50% { transform: translate(${100 + Math.random() * 400}px, ${100 + Math.random() * 200}px) scaleX(-1); }
+                    51% { transform: translate(${100 + Math.random() * 400}px, ${100 + Math.random() * 200}px) scaleX(1); }
+                    75% { transform: translate(${-200 + Math.random() * 400}px, ${50 + Math.random() * 150}px) scaleX(1); }
+                    100% { transform: translate(0, 0) scaleX(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Activer les oiseaux (optionnel)
+        // creerOiseaux();
+
+        // Effet de neige (optionnel)
+        function creerNeige() {
+            const snowContainer = document.createElement('div');
+            snowContainer.id = 'snow';
+            snowContainer.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;';
+            document.body.appendChild(snowContainer);
+            
+            for(let i = 0; i < 80; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.innerHTML = '❄';
+                snowflake.style.cssText = `
+                    position: absolute;
+                    font-size: ${10 + Math.random() * 15}px;
+                    color: white;
+                    opacity: ${0.3 + Math.random() * 0.5};
+                    top: -20px;
+                    left: ${Math.random() * 100}%;
+                    animation: fall ${10 + Math.random() * 20}s linear infinite ${Math.random() * 10}s;
+                `;
+                
+                snowContainer.appendChild(snowflake);
+            }
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+                    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Pour activer la neige (effet hivernal), décommentez la ligne suivante :
+        // creerNeige();
+    </script>
+</body>
+</html>
