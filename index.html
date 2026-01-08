@@ -213,26 +213,40 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* IMAGE */
-        .image-top {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
+        /* Barre de séparation stylisée */
+        .bar-separator {
+            width: 80%;
+            max-width: 600px;
+            height: 6px;
+            margin: 30px auto;
+            background: linear-gradient(90deg,
+                rgba(178, 194, 92, 0.8),
+                rgba(96, 170, 189, 0.9),
+                rgba(215, 107, 107, 0.8));
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
             position: relative;
-            z-index: 5;
+            overflow: hidden;
         }
 
-        .image-top img {
+        .bar-separator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transition: all 0.6s ease;
-            filter: brightness(1.05) contrast(1.05);
+            height: 100%;
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.6),
+                rgba(255, 255, 255, 0.3),
+                transparent);
+            animation: shine 3s infinite linear;
         }
 
-        .image-top img:hover {
-            transform: scale(1.03);
-            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         /* CONTENU - 4 BULLES */
@@ -283,7 +297,32 @@
         .tache1 { border-radius: 30% 20% 40% 40% / 40% 55% 30% 30%; }
         .tache2 { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
         .tache3 { border-radius: 36% 30% 60% 80% / 36% 80% 50% 50%; }
-        .tache4 { border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%; }
+       .tache4 {
+    width: 100%;
+    max-width: 90%;
+    min-height: 100px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%;
+    animation: breathe 8s ease-in-out infinite;
+    background: linear-gradient(90deg,
+        rgba(228, 238, 246, 0.95) 0%,
+        rgba(178, 194, 92, 0.7) 25%,
+        rgba(96, 170, 189, 0.8) 50%,
+        rgba(215, 107, 107, 0.7) 75%,
+        rgba(228, 238, 246, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+        @keyframes breathe {
+            0%, 100% { border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%; }
+            50% { border-radius: 45% 55% 65% 35% / 55% 45% 35% 65%; }
+        }
 
         /* COULEURS DOUCES */
         .sable { background: rgba(246, 239, 231, 0.9); }
@@ -410,7 +449,7 @@
             height: 400px;
             width: 100%;
             max-width: 900px;
-            margin: 50px auto;
+            margin: 20px auto 0;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             z-index: 5;
@@ -607,37 +646,10 @@
     <div id="header">
         <h1>Association Ô cœur de la vie</h1>
         <h2>Ensemble honorons la vie à travers la mort</h2>
-        
+
         <div class="header-scroll-indicator" onclick="scrollToContent()">
             <i class="fas fa-chevron-down"></i>
         </div>
-    </div>
-
-    <div class="image-top">
-        <img src="bannier.webp" alt="Bannière de l'association">
-    </div>
-
-    <!-- Poste avec photo dans le texte -->
-    <div id="poste">
-        <p><strong>Bonjour,</strong></p>
-        <p>Je suis <strong>Sylvie Darracq</strong>, présidente de l'association <strong>"Ô cœur de la vie"</strong>.</p>
-        <p>J'ai été approchée par Mathilde de l'émission <strong>"Le commun des vivants"</strong> de la station <a href="https://www.facebook.com/HAPCHOTWR" target="_blank">Hapchot Radio</a>. L'émission a pour but de parler de l'extraordinaire dans l'ordinaire de la vie des gens. L'histoire par ceux qui la font.</p>
-        
-        <div class="photo-dans-texte">
-            <img src="photo-president.jpg" alt="Sylvie Darracq">
-        </div>
-        
-        <p>Lors de son interview, elle m'a invitée à raconter mon histoire, mes rencontres, mon témoignage. Vous trouverez dans ce podcast, mon parcours, mes réflexions, mon cheminement qui m'amène à créer cette association <strong>Ô cœur de la vie Landes</strong>, rejointe par Kristell Auzizeau et Hélène Le Cadic pour s'engager sur ce chemin de la vie, la mort, et le deuil...</p>
-        
-        <a href="https://www.mixcloud.com/hapchot/le-commun-des-vivants-la-mort-au-coeur-de-la-vie/?fbclid=IwZXh0bgNhZW0CMTAAc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHkGhXX-JOecvAD_Q_gxM0YTL0U3-UK0cZ1b8yNRziU9UPzWu69EDzPRh1E6N_aem_N9Kh6sdQeGXR7mqdMput3A" class="btn-podcast" target="_blank">
-            <i class="fas fa-podcast"></i> Écouter le podcast
-        </a>
-        
-        <p style="margin-top: 20px; font-size: 0.95em;">
-            <a href="https://www.facebook.com/permalink.php?story_fbid=pfbid0343xbh8AMEfEVux2ZwaGVbXbADtdujfr1yFV1Z6Vn5SLBkN6TymG8uGC4Fn5mtHsCl&id=61569885189815" target="_blank">
-                <i class="fab fa-facebook"></i> Voir le post Facebook
-            </a>
-        </p>
     </div>
 
     <!-- 4 bulles -->
@@ -677,27 +689,55 @@
             </a>
         </div>
 
+        <!-- Barre de séparation avant la présentation de la présidente -->
+        <div class="bar-separator"></div>
+
+        <!-- Poste avec photo dans le texte -->
+        <div id="poste">
+            <p><strong>Bonjour,</strong></p>
+            <p>Je suis <strong>Sylvie Darracq</strong>, présidente de l'association <strong>"Ô cœur de la vie"</strong>.</p>
+            <p>J'ai été approchée par Mathilde de l'émission <strong>"Le commun des vivants"</strong> de la station <a href="https://www.facebook.com/HAPCHOTWR" target="_blank">Hapchot Radio</a>. L'émission a pour but de parler de l'extraordinaire dans l'ordinaire de la vie des gens. L'histoire par ceux qui la font.</p>
+
+            <div class="photo-dans-texte">
+                <img src="photo-president.jpg" alt="Sylvie Darracq">
+            </div>
+
+            <p>Lors de son interview, elle m'a invitée à raconter mon histoire, mes rencontres, mon témoignage. Vous trouverez dans ce podcast, mon parcours, mes réflexions, mon cheminement qui m'amène à créer cette association <strong>Ô cœur de la vie Landes</strong>, rejointe par Kristell Auzizeau et Hélène Le Cadic pour s'engager sur ce chemin de la vie, la mort, et le deuil...</p>
+
+            <a href="https://www.mixcloud.com/hapchot/le-commun-des-vivants-la-mort-au-coeur-de-la-vie/?fbclid=IwZXh0bgNhZW0CMTAAc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHkGhXX-JOecvAD_Q_gxM0YTL0U3-UK0cZ1b8yNRziU9UPzWu69EDzPRh1E6N_aem_N9Kh6sdQeGXR7mqdMput3A" class="btn-podcast" target="_blank">
+                <i class="fas fa-podcast"></i> Écouter le podcast
+            </a>
+
+            <p style="margin-top: 20px; font-size: 0.95em;">
+                <a href="https://www.facebook.com/permalink.php?story_fbid=pfbid0343xbh8AMEfEVux2ZwaGVbXbADtdujfr1yFV1Z6Vn5SLBkN6TymG8uGC4Fn5mtHsCl&id=61569885189815" target="_blank">
+                    <i class="fab fa-facebook"></i> Voir le post Facebook
+                </a>
+            </p>
+        </div>
+
+        <!-- Barre de séparation avant "Nous contacter" -->
+        <div class="bar-separator"></div>
+
         <div class="article ciel tache4">
             <h3>Nous contacter</h3>
             <p style="margin-bottom: 20px;">
                 <i class="fas fa-envelope"></i> <a href="mailto:ocvlandes@gmail.com">ocvlandes@gmail.com</a>
             </p>
-            
+
             <p style="margin-bottom: 20px;">
                 <i class="fas fa-phone telicon"></i>
                 <a href="tel:+33640649428"><strong class="tel">06 40 64 94 28</strong></a>
             </p>
-            
+
             <p>
                 Présidente de l'association<br>
                 <strong>Sylvie DARRACQ</strong>
             </p>
+
+            <div id="map"></div>
         </div>
 
     </div>
-
-    <!-- Carte -->
-    <div id="map"></div>
 
     <div class="liens">
         <a href="https://www.facebook.com/profile.php?id=61569885189815" target="_blank">
@@ -715,10 +755,6 @@
     <div id="back-to-top">
         <i class="fas fa-chevron-up"></i>
     </div>
-    
-    <a href="https://wa.me/33640649428" class="whatsapp-btn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
@@ -726,16 +762,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialiser la carte
             initMap();
-            
+
             // Créer les animations
             creerPapillons();
             creerFeuilles();
             creerEtoiles();
             creerParticles();
-            
+
             // Gestion du scroll
             initScrollAnimations();
-            
+
             // Animation de la bannière
             animerBanniere();
         });
@@ -752,28 +788,28 @@
         function creerPapillons() {
             const container = document.getElementById('papillons-container');
             const colors = ['#ff99cc', '#99ccff', '#ffcc99', '#ccff99'];
-            
+
             for (let i = 0; i < 10; i++) {
                 const papillon = document.createElement('div');
                 papillon.className = 'papillon';
-                
+
                 // Position aléatoire
                 const top = Math.random() * 90 + 5;
                 const left = Math.random() * 90 + 5;
                 const delay = Math.random() * 5;
                 const duration = 15 + Math.random() * 10;
-                
+
                 // Style du papillon avec SVG
                 const color1 = colors[Math.floor(Math.random() * colors.length)];
                 const color2 = colors[Math.floor(Math.random() * colors.length)];
-                
+
                 papillon.style.cssText = `
                     top: ${top}%;
                     left: ${left}%;
                     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 20 Q60 10 70 20 Q80 30 70 40 Q60 50 50 40 Q40 50 30 40 Q20 30 30 20 Q40 10 50 20" fill="${color1}" stroke="${color1.replace('cc', '66')}"/><path d="M30 60 Q40 50 50 60 Q60 70 70 60 Q80 50 70 40 Q60 30 50 40 Q40 30 30 40 Q20 50 30 60" fill="${color2}" stroke="${color2.replace('cc', '66')}"/></svg>');
                     animation: volPapillon ${duration}s infinite ease-in-out ${delay}s;
                 `;
-                
+
                 container.appendChild(papillon);
             }
         }
@@ -782,25 +818,25 @@
         function creerFeuilles() {
             const container = document.getElementById('feuilles-container');
             const leafColors = ['#b2c25c', '#a3b84f', '#8fa844'];
-            
+
             for (let i = 0; i < 12; i++) {
                 const feuille = document.createElement('div');
                 feuille.className = 'feuille';
-                
+
                 // Position aléatoire
                 const left = Math.random() * 100;
                 const delay = Math.random() * 10;
                 const duration = 15 + Math.random() * 15;
-                
+
                 // Style de la feuille
                 const color = leafColors[Math.floor(Math.random() * leafColors.length)];
-                
+
                 feuille.style.cssText = `
                     left: ${left}%;
                     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 5 90 30 Q85 60 50 90 Q15 60 10 30 Q30 5 50 10" fill="${color}" opacity="0.7"/></svg>');
                     animation: tomberFeuille ${duration}s infinite linear ${delay}s;
                 `;
-                
+
                 container.appendChild(feuille);
             }
         }
@@ -808,23 +844,23 @@
         // Création des étoiles scintillantes
         function creerEtoiles() {
             const container = document.getElementById('etoiles-container');
-            
+
             for (let i = 0; i < 15; i++) {
                 const etoile = document.createElement('div');
                 etoile.className = 'etoile';
-                
+
                 // Position aléatoire
                 const top = Math.random() * 100;
                 const left = Math.random() * 100;
                 const delay = Math.random() * 5;
                 const duration = 3 + Math.random() * 4;
-                
+
                 etoile.style.cssText = `
                     top: ${top}%;
                     left: ${left}%;
                     animation: scintiller ${duration}s infinite ease-in-out ${delay}s;
                 `;
-                
+
                 container.appendChild(etoile);
             }
         }
@@ -832,17 +868,17 @@
         // Création des particules flottantes
         function creerParticles() {
             const container = document.getElementById('particles-container');
-            
+
             for (let i = 0; i < 20; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                
+
                 const size = 50 + Math.random() * 200;
                 const x = Math.random() * 100;
                 const y = Math.random() * 100;
                 const duration = 20 + Math.random() * 30;
                 const delay = Math.random() * 20;
-                
+
                 particle.style.cssText = `
                     width: ${size}px;
                     height: ${size}px;
@@ -850,7 +886,7 @@
                     top: ${y}%;
                     animation: moveBg ${duration}s ease infinite ${delay}s;
                 `;
-                
+
                 container.appendChild(particle);
             }
         }
@@ -858,11 +894,11 @@
         // Initialiser la carte
         function initMap() {
             var map = L.map('map').setView([43.7167, -0.6833], 15);
-            
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributeurs'
             }).addTo(map);
-            
+
             // Marqueur personnalisé
             var customIcon = L.divIcon({
                 className: 'custom-marker',
@@ -870,7 +906,7 @@
                 iconSize: [30, 30],
                 iconAnchor: [15, 30]
             });
-            
+
             L.marker([43.7167, -0.6833], {icon: customIcon}).addTo(map)
                 .bindPopup('<div style="font-weight:bold; font-size:1.1em; color:#4a8b9d;">Association Ô cœur de la vie</div><div>1369 Route d\'Ossens, 40465 Pontonx-sur-l\'Adour</div>')
                 .openPopup();
@@ -880,7 +916,7 @@
         function initScrollAnimations() {
             // Bouton retour en haut
             const backToTopBtn = document.getElementById('back-to-top');
-            
+
             window.addEventListener('scroll', () => {
                 // Bouton retour en haut
                 if (window.scrollY > 300) {
@@ -888,13 +924,13 @@
                 } else {
                     backToTopBtn.classList.remove('show');
                 }
-                
+
                 // Animation des articles
                 const articles = document.querySelectorAll('.article');
                 articles.forEach(article => {
                     const articleTop = article.getBoundingClientRect().top;
                     const windowHeight = window.innerHeight;
-                    
+
                     if (articleTop < windowHeight - 100) {
                         article.style.opacity = '1';
                         article.style.transform = 'translateY(0)';
@@ -916,7 +952,7 @@
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
                     if(targetId === '#') return;
-                    
+
                     const targetElement = document.querySelector(targetId);
                     if(targetElement) {
                         window.scrollTo({
@@ -944,7 +980,7 @@
             container.id = 'oiseaux';
             container.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;';
             document.body.appendChild(container);
-            
+
             for(let i = 0; i < 6; i++) {
                 const oiseau = document.createElement('div');
                 oiseau.innerHTML = '🕊️';
@@ -954,13 +990,13 @@
                     opacity: 0.6;
                     animation: flyBird ${20 + Math.random() * 30}s infinite linear ${Math.random() * 15}s;
                 `;
-                
+
                 oiseau.style.left = `${Math.random() * 100}%`;
                 oiseau.style.top = `${Math.random() * 100}%`;
-                
+
                 container.appendChild(oiseau);
             }
-            
+
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes flyBird {
@@ -976,44 +1012,9 @@
             document.head.appendChild(style);
         }
 
-        // Activer les oiseaux (optionnel)
-        // creerOiseaux();
+        // Activer les oiseaux
+        creerOiseaux();
 
-        // Effet de neige (optionnel)
-        function creerNeige() {
-            const snowContainer = document.createElement('div');
-            snowContainer.id = 'snow';
-            snowContainer.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;';
-            document.body.appendChild(snowContainer);
-            
-            for(let i = 0; i < 80; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.innerHTML = '❄';
-                snowflake.style.cssText = `
-                    position: absolute;
-                    font-size: ${10 + Math.random() * 15}px;
-                    color: white;
-                    opacity: ${0.3 + Math.random() * 0.5};
-                    top: -20px;
-                    left: ${Math.random() * 100}%;
-                    animation: fall ${10 + Math.random() * 20}s linear infinite ${Math.random() * 10}s;
-                `;
-                
-                snowContainer.appendChild(snowflake);
-            }
-            
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fall {
-                    0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-                    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Pour activer la neige (effet hivernal), décommentez la ligne suivante :
-        // creerNeige();
     </script>
 </body>
 </html>
