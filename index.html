@@ -297,31 +297,34 @@
         .tache1 { border-radius: 30% 20% 40% 40% / 40% 55% 30% 30%; }
         .tache2 { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
         .tache3 { border-radius: 36% 30% 60% 80% / 36% 80% 50% 50%; }
-       .tache4 {
-    width: 100%;
-    max-width: 90%;
-    min-height: 100px;
-    margin: 0 auto;
-    padding: 30px;
-    border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%;
-    animation: breathe 8s ease-in-out infinite;
-    background: linear-gradient(90deg,
-        rgba(228, 238, 246, 0.95) 0%,
-        rgba(178, 194, 92, 0.7) 25%,
-        rgba(96, 170, 189, 0.8) 50%,
-        rgba(215, 107, 107, 0.7) 75%,
-        rgba(228, 238, 246, 0.95) 100%);
-    backdrop-filter: blur(10px);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-}
+        
+        /* NOUVEAU STYLE POUR NOUS CONTACTER */
+        .tache4 {
+            width: 100%;
+            max-width: 90%;
+            min-height: 100px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 40px;
+            animation: breathe 8s ease-in-out infinite;
+            background: linear-gradient(135deg,
+                rgba(228, 238, 246, 0.98) 0%,
+                rgba(178, 194, 92, 0.1) 25%,
+                rgba(96, 170, 189, 0.15) 50%,
+                rgba(215, 107, 107, 0.1) 75%,
+                rgba(228, 238, 246, 0.98) 100%);
+            backdrop-filter: blur(15px);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
 
         @keyframes breathe {
-            0%, 100% { border-radius: 35% 65% 55% 45% / 65% 35% 45% 55%; }
-            50% { border-radius: 45% 55% 65% 35% / 55% 45% 35% 65%; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.005); }
         }
 
         /* COULEURS DOUCES */
@@ -370,6 +373,90 @@
             width: 1em;
             margin-left: -1em;
             font-size: 1.2em;
+        }
+
+        /* STYLE AMÉLIORÉ POUR NOUS CONTACTER */
+        .contact-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .contact-card {
+            flex: 1;
+            min-width: 250px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border-color: #60aabd;
+        }
+
+        .contact-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #60aabd;
+            display: block;
+        }
+
+        .email-card .contact-icon { color: #d76b6b; }
+        .phone-card .contact-icon { color: #b2c25c; }
+        .address-card .contact-icon { color: #4a8b9d; }
+
+        .contact-detail {
+            font-size: 1.1em;
+            color: #4b5c6b;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .contact-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #60aabd, #4a8b9d);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(96, 170, 189, 0.3);
+        }
+
+        .contact-link:hover {
+            background: linear-gradient(135deg, #d76b6b, #c55a5a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(215, 107, 107, 0.4);
+        }
+
+        .presidente-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            border-left: 4px solid #b2c25c;
         }
 
         /* CONTACT */
@@ -449,7 +536,7 @@
             height: 400px;
             width: 100%;
             max-width: 900px;
-            margin: 20px auto 0;
+            margin: 30px auto 0;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             z-index: 5;
@@ -522,6 +609,20 @@
             .liens a { display: block; margin: 10px 0; }
             #back-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; }
             .header-scroll-indicator { bottom: 20px; font-size: 1.5em; }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-card {
+                min-width: 100%;
+            }
+            
+            .tache4 {
+                padding: 25px 15px;
+                border-radius: 25px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -530,6 +631,8 @@
             .btn-podcast { padding: 10px 20px; font-size: 0.9em; }
             .tel { font-size: 1.2em; }
             #photo-asso { width: 60px; height: 60px; }
+            .contact-icon { font-size: 2em; }
+            .contact-detail { font-size: 1em; }
         }
 
         /* ANIMATIONS DES PAPILLONS */
@@ -544,125 +647,6 @@
             filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
             opacity: 0.8;
         }
-/* RESPONSIVE POUR MOBILE */
-@media (max-width: 768px) {
-    /* Header */
-    #header {
-        height: 80vh;
-        padding: 10px;
-    }
-    #header h1 {
-        font-size: 2.2em;
-        margin-bottom: 10px;
-    }
-    #header h2 {
-        font-size: 1.3em;
-    }
-    .header-scroll-indicator {
-        font-size: 1.5em;
-        bottom: 30px;
-    }
-
-    /* Photo de l'association */
-    #photo-asso {
-        width: 60px;
-        height: 60px;
-        top: 10px;
-        left: 10px;
-    }
-
-    /* Bulles (articles) */
-    #content {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-    }
-    .article {
-        max-width: 100%;
-        margin: 10px 0;
-        padding: 20px 15px;
-    }
-    .tache4 {
-        min-height: 80px;
-        padding: 20px 15px;
-    }
-
-    /* Poste (présentation) */
-    #poste {
-        margin: 15px;
-        padding: 15px;
-    }
-    .photo-dans-texte {
-        width: 120px;
-        height: 120px;
-        float: none;
-        margin: 10px auto;
-        display: block;
-    }
-
-    /* Carte */
-    #map {
-        height: 250px;
-        margin: 15px auto;
-    }
-
-    /* Boutons et liens */
-    .btn-podcast {
-        padding: 10px 15px;
-        font-size: 0.9em;
-        margin: 15px 0;
-    }
-    .liens {
-        padding: 20px 10px;
-    }
-    .liens a {
-        display: block;
-        margin: 10px 0;
-        font-size: 1em;
-    }
-
-    /* Bouton retour en haut */
-    #back-to-top {
-        width: 45px;
-        height: 45px;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    /* Barre de séparation */
-    .bar-separator {
-        width: 90%;
-        height: 4px;
-        margin: 20px auto;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Header */
-    #header h1 {
-        font-size: 1.8em;
-    }
-    #header h2 {
-        font-size: 1.1em;
-    }
-
-    /* Bouton podcast */
-    .btn-podcast {
-        padding: 8px 12px;
-        font-size: 0.85em;
-    }
-
-    /* Téléphone */
-    .tel {
-        font-size: 1.2em;
-    }
-
-    /* Photo asso */
-    #photo-asso {
-        width: 50px;
-        height: 50px;
-    }
-}
 
         @keyframes volPapillon {
             0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
@@ -837,23 +821,51 @@
         <!-- Barre de séparation avant "Nous contacter" -->
         <div class="bar-separator"></div>
 
+        <!-- SECTION NOUS CONTACTER AMÉLIORÉE -->
         <div class="article ciel tache4">
             <h3>Nous contacter</h3>
-            <p style="margin-bottom: 20px;">
-                <i class="fas fa-envelope"></i> <a href="mailto:ocvlandes@gmail.com">ocvlandes@gmail.com</a>
-            </p>
-
-            <p style="margin-bottom: 20px;">
-                <i class="fas fa-phone telicon"></i>
-                <a href="tel:+33640649428"><strong class="tel">06 40 64 94 28</strong></a>
-            </p>
-
-            <p>
-                Présidente de l'association<br>
-                <strong>Sylvie DARRACQ</strong>
-            </p>
-
-            <div id="map"></div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-card email-card">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <h4>Email</h4>
+                        <p class="contact-detail">ocvlandes@gmail.com</p>
+                        <a href="mailto:ocvlandes@gmail.com" class="contact-link">
+                            <i class="fas fa-paper-plane"></i> Envoyer un email
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card phone-card">
+                        <i class="fas fa-phone-alt contact-icon"></i>
+                        <h4>Téléphone</h4>
+                        <p class="contact-detail"><strong class="tel">06 40 64 94 28</strong></p>
+                        <a href="tel:+33640649428" class="contact-link">
+                            <i class="fas fa-phone"></i> Appeler maintenant
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card address-card">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <h4>Adresse</h4>
+                        <p class="contact-detail">
+                            1369 Route d'Ossens<br>
+                            40465 Pontonx-sur-l'Adour
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="presidente-info">
+                    <h4>Présidente de l'association</h4>
+                    <p><strong>Sylvie DARRACQ</strong></p>
+                    <p style="margin-top: 10px; font-size: 0.95em; color: #666;">
+                        Disponible pour échanger sur nos actions et projets
+                    </p>
+                </div>
+                
+                <!-- Carte -->
+                <div id="map"></div>
+            </div>
         </div>
 
     </div>
